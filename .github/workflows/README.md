@@ -1,7 +1,8 @@
-# 📖 How to Get Read-Only Access to This Repository
+# 📖 How to Get Access to This Repository
 
 This workflow automatically adds you to the **Readers** team when you raise a Pull Request.  
-You will get **read-only** access — you can view and clone the repo, but **cannot push, modify, or delete** anything.
+The repository is **public** — you can view and **fork** it freely.  
+You **cannot push, modify, or delete** anything in this repo.
 
 ---
 
@@ -74,9 +75,10 @@ The **GitHub Actions workflow** will run automatically and:
 | 1 | ✅ Validate that only `readers.txt` was changed |
 | 2 | ✅ Extract your GitHub username from the diff |
 | 3 | ✅ Create the **Readers** team (if it doesn't exist) with read-only permission |
-| 4 | ✅ Add **you** to the Readers team |
-| 5 | ✅ Auto-merge your PR |
-| 6 | ✅ Post a welcome comment on your PR |
+| 4 | ✅ Make the repository **public** (fixes any 404) |
+| 5 | ✅ Add **you** to the Readers team |
+| 6 | ✅ Auto-merge your PR |
+| 7 | ✅ Post a welcome comment on your PR |
 
 You will see a comment like this on your PR:
 
@@ -96,16 +98,18 @@ If your PR is closed, simply open a new one following the steps above correctly.
 
 ---
 
-## 🔒 What Read-Only Access Means
+## 🔒 What Access Means
 
 As a member of the **Readers** team you can:
 
 | ✅ Allowed | ❌ Not Allowed |
 |-----------|---------------|
 | View all files and code | Push / commit changes |
-| Clone the repository | Delete branches or tags |
-| Download releases | Modify any file |
-| Open issues (if enabled) | Merge pull requests |
+| **Fork** the repository | Delete branches or tags |
+| Open issues (if enabled) | Modify any file in this repo |
+| Download releases | Merge pull requests |
+
+> ℹ️ **About cloning:** Because the repository is public, GitHub allows anyone to clone it — this cannot be restricted on public repositories. If you only need to read/browse code, use the GitHub UI or fork the repo to your own account.
 
 ---
 

@@ -1,0 +1,73 @@
+name: 🛡️ Enforce Branch Protection (Read-Only Repo)
+
+# Run once manually by the repo admin, or on every push to main
+# to ensure protection rules are always in place.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/protect-main.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  protect-main:
+    name: Lock main branch — no direct pushes or deletions
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Apply branch protection rules to main
+        env:
+          GH_TOKEN: ${{ secrets.ORG_ADMIN_TOKEN }}
+        run: |
+          ORG="${{ github.repository_owner }}"
+          REPO="${{ github.event.repository.name }}"
+
+          gh api "repos/$ORG/$REPO/branches/main/protection" \
+            --method PUT \
+            --header "Accept: application/vnd.github+json" \
+            --input - <<'EOF'
+          {
+            "required_status_checks": null,
+            "enforce_admins": false,
+            "required_pull_request_reviews": {
+              "dismiss_stale_reviews": true,
+              "require_code_owner_reviews": false,
+              "required_approving_review_count": 1
+            },
+            "restrictions": null,
+            "allow_force_pushes": false,
+            "allow_deletions": false,
+            "block_creations": false,
+            "required_conversation_resolution": false,
+            "lock_branch": false
+          }
+          EOF
+
+          echo "✅ Branch protection applied:"
+          echo "   - Direct pushes to main: BLOCKED"
+          echo "   - Force pushes: BLOCKED"
+          echo "   - Branch deletion: BLOCKED"
+          echo "   - PR required with at least 1 review before merge"
+
+      - name: Confirm repository is public
+        env:
+          GH_TOKEN: ${{ secrets.ORG_ADMIN_TOKEN }}
+        run: |
+          ORG="${{ github.repository_owner }}"
+          REPO="${{ github.event.repository.name }}"
+
+          VISIBILITY=$(gh api "repos/$ORG/$REPO" --jq '.visibility')
+          echo "Repository visibility: $VISIBILITY"
+
+          if [ "$VISIBILITY" != "public" ]; then
+            echo "⚠️  Repository is not public. Making it public now..."
+            gh api "repos/$ORG/$REPO" \
+              --method PATCH \
+              -f visibility="public"
+            echo "✅ Repository is now public."
+          else
+            echo "✅ Repository is already public — no change needed."
+          fi
