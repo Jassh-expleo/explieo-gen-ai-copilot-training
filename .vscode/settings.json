@@ -1,0 +1,7 @@
+{
+    "python.testing.pytestArgs": [
+        "6AprilOnwardsTraining"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}
