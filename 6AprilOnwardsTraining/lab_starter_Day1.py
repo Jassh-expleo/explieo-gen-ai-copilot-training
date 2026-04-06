@@ -35,65 +35,6 @@ from __future__ import annotations
 # - Return False for invalid emails instead of crashing.
 
 
-def _normalize_email_inputs(
-    email: str,
-    allowed_domains: set[str] | None,
-) -> tuple[str, set[str] | None]:
-    """Normalize raw inputs before validation logic runs.
-
-    Parameters
-    ----------
-    email:
-        Raw value supplied by the caller.  Non-``str`` values are coerced to
-        an empty string so that downstream logic can return ``False`` cleanly.
-    allowed_domains:
-        Optional set of permitted domain strings.  When provided a **new** set
-        is returned with every entry stripped and lowercased; the caller's
-        original set is never mutated.  ``None`` is passed through unchanged.
-
-    Returns
-    -------
-    tuple[str, set[str] | None]
-        ``(normalized_email, normalized_allowed_domains)``
-    """
-    # Rule 1 — non-string email: treat as invalid by returning empty string.
-    if not isinstance(email, str):
-        normalized_email = ""
-    else:
-        # Rule 2 — strip whitespace; Rule 3 — lowercase.
-        normalized_email = email.strip().lower()
-
-    # Rule 4 — normalize allowed_domains without mutating the caller's set.
-    if allowed_domains is None:
-        normalized_domains: set[str] | None = None
-    else:
-        normalized_domains = {d.strip().lower() for d in allowed_domains}
-
-    return normalized_email, normalized_domains
-
-
-def validate_customer_email(email: str, allowed_domains: set[str] | None = None) -> bool:
-    """Validate a customer email for platform onboarding.
-
-    Parameters
-    ----------
-    email:
-        Raw email string supplied by the caller.
-    allowed_domains:
-        Optional set of permitted domain strings (e.g. ``{"example.com", "corp.io"}``).
-        ``None`` means no domain restriction is applied.
-        An *empty* set rejects all emails regardless of content.
-
-    Returns
-    -------
-    bool
-        ``True`` if the email passes all applicable checks, ``False`` otherwise.
-        This function never raises on user-supplied input.
-    """
-    email, allowed_domains = _normalize_email_inputs(email, allowed_domains)
-    if not email:
-        return False
-    return False  # placeholder — structural validation comes next (T3)
 
 
 # TODO 2: Implement calculate_compound_interest(principal: float, annual_rate: float, years: int, compounds_per_year: int = 12) -> float
